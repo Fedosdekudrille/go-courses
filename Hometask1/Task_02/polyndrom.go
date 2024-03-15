@@ -1,20 +1,29 @@
 package main
 
 import (
+	"crypto/rand"
 	"fmt"
+	"math/big"
+	"time"
 )
 
 func main() {
-	fmt.Println("Insert number")
+	start := time.Now()
+	for i := 0; i < 100_000; i++ {
+		pain(rand.Int(rand.Reader, big.NewInt(2)))
+	}
+	fmt.Println(time.Now().Sub(start))
+}
+
+func pain(bigNum *big.Int, _ error) {
+	num := bigNum.Int64()
 	var (
-		num        uint
 		trinaryNum uint = 0
 	)
-	fmt.Scanln(&num)
 
 	var numPlace uint = 1
 	for ; num > 0; numPlace *= 10 {
-		trinaryNum += num % 3 * numPlace
+		trinaryNum += uint(num) % 3 * numPlace
 		num /= 3
 	}
 

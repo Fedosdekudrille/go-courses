@@ -4,16 +4,9 @@ import "fmt"
 
 func group(groupingMap map[byte]string) (res map[byte][]string) {
 	res = make(map[byte][]string, 10)
-	for i := 0; i < 10; i++ {
-		str := make([]string, 0, len(groupingMap)/10)
-		for key, value := range groupingMap {
-			if key%10 == byte(i) {
-				str = append(str, value)
-			}
-		}
-		if len(str) > 0 {
-			res[byte(i)] = str
-		}
+	for index, value := range groupingMap {
+		i := index % 10
+		res[i] = append(res[i], value)
 	}
 	return res
 }

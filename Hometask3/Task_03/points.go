@@ -34,17 +34,17 @@ type PointLabeled struct {
 	Label string
 }
 
-func (p *PointLabeled) SetCoordinates(x, y float64) {
-	p.Point.SetCoordinates(x, y)
-}
-
-func (p *PointLabeled) GetCoordinates() (x, y float64) {
-	return p.Point.GetCoordinates()
-}
-
-func (p *PointLabeled) Normalize(maxX, minX, maxY, minY float64) {
-	p.Point.Normalize(maxX, minX, maxY, minY)
-}
+//func (p *PointLabeled) SetCoordinates(x, y float64) {
+//	p.Point.SetCoordinates(x, y)
+//}
+//
+//func (p *PointLabeled) GetCoordinates() (x, y float64) {
+//	return p.Point.GetCoordinates()
+//}
+//
+//func (p *PointLabeled) Normalize(maxX, minX, maxY, minY float64) {
+//	p.Point.Normalize(maxX, minX, maxY, minY)
+//}
 
 type CoordinatesManager interface {
 	GetCoordinates() (x, y float64)

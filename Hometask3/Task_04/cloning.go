@@ -42,11 +42,11 @@ type Printer interface {
 
 func sliceClone(c []interface{}) (cloneRes []interface{}) { // Не выделил память из-за незнания кол-ва конечных элементов
 	for i := 0; i < len(c); i++ {
-		switch c[i].(type) {
+		switch v := c[i].(type) {
 		case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, uintptr, float32, float64, bool, string:
 			cloneRes = append(cloneRes, c[i]) // Если есть способ элегантнее, то я его не нашёл
 		case Cloner:
-			cloneRes = append(cloneRes, c[i].(Cloner).Clone())
+			cloneRes = append(cloneRes, v.Clone())
 		}
 	}
 	return

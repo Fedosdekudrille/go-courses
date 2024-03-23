@@ -36,11 +36,11 @@ func (c *Color) GetBrightness() float64 {
 
 func maxBrightness(colors []Color) (brightest *Color) { // При colors == nil вернёт nil
 	var maxBrightness, curBrightness float64
-	for _, c := range colors {
-		curBrightness = c.GetBrightness()
+	for i := 0; i < len(colors); i++ {
+		curBrightness = colors[i].GetBrightness()
 		if curBrightness > maxBrightness {
 			maxBrightness = curBrightness
-			brightest = &c
+			brightest = &colors[i]
 		}
 	}
 	return
@@ -55,6 +55,9 @@ func main() {
 	colors[2].SetB(255)
 	brightest := maxBrightness(colors)
 	fmt.Println(brightest.GetBrightness())
+	colors[1].GetBrightness()
+	brightest.SetG(10)
 	brightest.Print()
+	colors[1].Print()
 	fmt.Println(maxBrightness(nil))
 }

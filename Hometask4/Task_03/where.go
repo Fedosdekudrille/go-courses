@@ -12,10 +12,9 @@ func Where[T interface{}](elements []T, check func(T) bool) (res []T) {
 	l := len(elements)
 	part, leftAdd, add := l/8, l%8, 0
 	var lBorder int
-	ch := [8]chan []T{} // Получают результат, обеспечивают ожидание выполнения
+	ch := make(chan []T, 8)
 	for i := 0; i < 8; i++ {
-		ch[i] = make(chan []T)
-		if leftAdd > 0 {
+		if leftAdd > 0 { // Если не кратно 8, равномерно распределяется между горутинами
 			add = 1
 			leftAdd--
 		} else {
@@ -29,20 +28,19 @@ func Where[T interface{}](elements []T, check func(T) bool) (res []T) {
 				}
 			}
 			ch <- res
-		}(elements[lBorder:lBorder+part+add], check, ch[i])
+		}(elements[lBorder:lBorder+part+add], check, ch)
 		lBorder += part + add
 	}
 	for i := 0; i < 8; i++ {
-		if v := ch[i]; v != nil {
-			res = append(res, <-ch[i]...)
-		} else {
-			fmt.Println(i)
-		}
+		res = append(res, <-ch...)
 	}
 	return
 }
 
 func where(nums []int, check func(int) bool) []int {
+	if len(nums) == 0 || check == nil {
+		return []int{}
+	}
 	length := len(nums)
 	retNums := make([]int, 0, length)
 	for i := 0; i < length; i++ {
@@ -54,10 +52,32 @@ func where(nums []int, check func(int) bool) []int {
 	return retNums
 }
 
+type Student struct {
+	Iq   int
+	Name string
+	Mark int
+}
+
+func (s Student) Compare(other Student) int {
+	sTotal := s.Iq + s.Mark*10
+	otherTotal := other.Iq + other.Mark*10
+	if s.Name == other.Name || sTotal == otherTotal {
+		return 0
+	} else if sTotal > otherTotal {
+		return 1
+	}
+	return -1
+}
 func main() {
+	defer func() {
+		if err := recover(); err != nil {
+			println(err)
+		}
+	}()
 	fmt.Println(Where([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, func(x int) bool { return x%2 == 1 }))
-	s := make([]int, 100000000)
-	for i := 0; i < 100000000; i++ {
+	sLen := 10000000 //Равенство достигается примерно при 500000 длине
+	s := make([]int, sLen)
+	for i := 0; i < sLen; i++ {
 		s = append(s, i)
 	}
 	t := time.Now()
@@ -66,4 +86,9 @@ func main() {
 	t = time.Now()
 	where(s, func(x int) bool { return x%2 == 1 })
 	fmt.Println(time.Since(t))
+
+	avgStud := Student{Iq: 110, Name: "Ivan", Mark: 7}
+	fmt.Println(Where([]Student{{Iq: 90, Name: "Volodya", Mark: 9}, {Iq: 125, Name: "Petya", Mark: 5}, avgStud}, func(s Student) bool { return s.Compare(avgStud) >= 0 }))
+
+	Where([]int{1, 2, 3}, func(x int) bool { panic("Учебная тревога") }) // Обработка паники на внешнем коде
 }

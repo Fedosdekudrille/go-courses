@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Task Manager</title>
+        <link rel="stylesheet" href="./web/static/style.css">
+        <script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <h1>Task Manager</h1>
+        {{ template "table" . }}
+    </body>
+</html>
+{{ define "table"}}
+    <table id="tasks">
+        {{ range . }}
+            {{ template "row" . }}
+        {{ end }}
+    </table>
+{{ end }}
+{{ define "row"}}
+    <tr><td>{{ .ID }}</td><td>{{ .Name }}</td><td {{ if .IsCompleted }}style="color: green">✓
+        {{ else }}style="color: red; cursor: pointer" hx-post="/complete/{{ .ID }}" hx-swap="outerHTML" hx-target="closest tr" title="Click to complete">✗{{ end }}</td></tr>
+{{ end }}

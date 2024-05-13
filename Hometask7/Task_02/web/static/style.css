@@ -1,0 +1,20 @@
+.user-group{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    border-radius: 10px;
+    border: #4a4a4a 2px solid;
+    box-shadow: #9c9c9c 4px 4px;
+    padding: 10px;
+    margin: 10px;
+    justify-content: flex-end;
+    height: 50vh;
+}
+
+button{
+    height: 30px;
+    font-size: 18px;
+}
+html{
+    font-size: 17px;
+}

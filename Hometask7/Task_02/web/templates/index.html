@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>Users</title>
+        <!-- using htmx, so requires internet connection -->
+        <script src="https://unpkg.com/htmx.org"></script>
+        <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/client-side-templates.js"></script>
+        <script src="https://unpkg.com/mustache@latest"></script>
+        <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/path-params.js"></script>
+        <link rel="stylesheet" href="static\style.css">
+    </head>
+    <body>
+        <div hx-ext="client-side-templates">
+            <div style="display: flex">
+                <div class="user-group">
+                    <p id="users" style="overflow-y: scroll"></p>
+                    <button hx-get="/users" hx-swap="innerHTML" hx-target="#users" mustache-array-template="users-template">Get Users</button>
+                </div>
+                <div class="user-group">
+                    <p id="user"></p>
+                    <label for="id">Id</label>
+                    <input id="id" type="text" placeholder="1">
+                    <div style="display: flex" hx-ext="path-params" >
+                        <button style="flex: 1" hx-get="/users/{id}" hx-vals='js:{id: getId()}' hx-swap="innerHTML" hx-target="#user" mustache-template="user-template">Get User</button>
+                        <button style="flex: 1" hx-post="/users/{id}" hx-vals='js:{id: getId()}' hx-swap="innerHTML" hx-target="#users" mustache-array-template="users-template">Delete User</button>
+                    </div>
+                </div>
+            </div>
+
+            <template id="user-template">
+                <p>{{id}} - Email: {{email}};   Username: {{username}};  Is active: {{isActive}}</p>
+            </template>
+
+            <template id="users-template">
+                {{#data}}
+                <p id="user-{{id}}">{{id}} - Email: {{email}};   Username: {{username}};  Is active: {{isActive}}</p>
+                {{/data}}
+            </template>
+        </div>
+    </body>
+    <script type="text/javascript">
+        function getId(){
+            return id = document.getElementById("id").value ? id : -1
+        }
+    </script>
+</html>

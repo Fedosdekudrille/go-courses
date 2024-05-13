@@ -22,22 +22,22 @@ func NewRareMatrix[T Number](rows, cols int) *RareMatrix[T] {
 
 func (m *RareMatrix[T]) Set(row, col int, value T) {
 	if m == nil || row < 0 || col < 0 || row >= m.rows || col >= m.cols {
-		panic("invalid coordinates")
+		panic("Неправильные координаты")
 	}
 	m.data[[2]int{row, col}] = value
 }
 
 func (m *RareMatrix[T]) Get(row, col int) T {
 	if m == nil || row < 0 || col < 0 || row >= m.rows || col >= m.cols {
-		panic("invalid coordinates")
+		panic("Неправильные координаты")
 	}
 	if val, ok := m.data[[2]int{row, col}]; ok {
 		return val
 	}
-	return *new(T)
+	return 0
 }
 
-type CrementInt int // разрешает инкремент и декремент во время операции
+type CrementInt int // Разрешает инкремент и декремент во время операции
 
 func (i CrementInt) Inc() CrementInt {
 	return i + 1
@@ -58,10 +58,10 @@ func main() {
 	//m.Set(300, 23, 21)
 	println(m.Get(0, 0))
 	println(m.Get(100, 200))
+	//println(m.Get(299, 300))
 	a := CrementInt(10)
 	println(a.Inc().Inc().Dec() * 1000)
 	cM := NewRareMatrix[CrementInt](300, 300)
 	cM.Set(0, 0, a.Inc().Inc().Dec())
 	println(cM.Get(0, 0))
-	//println(m.Get(299, 300))
 }

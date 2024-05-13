@@ -32,7 +32,7 @@ func (s *Stack[T]) Push(value T) {
 
 func (s *Stack[T]) Pop() (val T, err error) {
 	if s.IsEmpty() {
-		return val, errors.New("stack is empty")
+		return val, errors.New("Стек пустой")
 	}
 	val = s.current.Value
 	s.current = s.current.next
